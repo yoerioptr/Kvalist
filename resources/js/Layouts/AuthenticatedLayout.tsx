@@ -14,6 +14,10 @@ export default function Authenticated({
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    if (!user) {
+        return <div className="min-h-screen bg-gray-100">{children}</div>;
+    }
+
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="border-b border-gray-100 bg-white">
@@ -32,6 +36,24 @@ export default function Authenticated({
                                     active={route().current('dashboard')}
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    href={route('stores.index')}
+                                    active={route().current('stores.*')}
+                                >
+                                    Stores
+                                </NavLink>
+                                <NavLink
+                                    href={route('products.index')}
+                                    active={route().current('products.*')}
+                                >
+                                    Products
+                                </NavLink>
+                                <NavLink
+                                    href={route('baskets.index')}
+                                    active={route().current('baskets.*')}
+                                >
+                                    Baskets
                                 </NavLink>
                             </div>
                         </div>
@@ -136,6 +158,24 @@ export default function Authenticated({
                             active={route().current('dashboard')}
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('stores.index')}
+                            active={route().current('stores.*')}
+                        >
+                            Stores
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('products.index')}
+                            active={route().current('products.*')}
+                        >
+                            Products
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('baskets.index')}
+                            active={route().current('baskets.*')}
+                        >
+                            Baskets
                         </ResponsiveNavLink>
                     </div>
 
