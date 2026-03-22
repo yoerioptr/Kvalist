@@ -17,12 +17,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon $updated_at
  *
  * @property-read \App\Models\User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Basket> $baskets
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductWeight> $productWeights
  */
 #[Fillable(['name', 'created_by'])]
-final class Product extends Model
+final class Store extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProductFactory> */
+    /** @use HasFactory<\Database\Factories\StoreFactory> */
     use HasFactory, HasUuids;
 
     #[\Override]
@@ -37,6 +38,11 @@ final class Product extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function baskets(): HasMany
+    {
+        return $this->hasMany(Basket::class);
     }
 
     public function productWeights(): HasMany

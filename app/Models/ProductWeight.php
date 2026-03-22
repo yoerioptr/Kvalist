@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Utils\Enum\Unit;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,27 +10,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id UUID primary key
- * @property string $basket_id
+ * @property string $store_id
  * @property string $product_id
- * @property int $amount
- * @property Unit $unit
+ * @property int $weight
  * @property string $created_by
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  *
- * @property-read \App\Models\Basket $basket
+ * @property-read \App\Models\Store $store
  * @property-read \App\Models\Product $product
  * @property-read \App\Models\User $creator
  */
-#[Fillable(['basket_id', 'product_id', 'amount', 'unit', 'created_by'])]
-final class BasketItem extends Model
+#[Fillable(['store_id', 'product_id', 'weight', 'created_by'])]
+final class ProductWeight extends Model
 {
-    /** @use HasFactory<\Database\Factories\BasketItemFactory> */
+    /** @use HasFactory<\Database\Factories\ProductWeightFactory> */
     use HasFactory, HasUuids;
 
-    public function basket(): BelongsTo
+    public function store(): BelongsTo
     {
-        return $this->belongsTo(Basket::class);
+        return $this->belongsTo(Store::class);
     }
 
     public function product(): BelongsTo
@@ -48,8 +46,7 @@ final class BasketItem extends Model
     protected function casts(): array
     {
         return [
-            'amount' => 'integer',
-            'unit' => Unit::class,
+            'weight' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
