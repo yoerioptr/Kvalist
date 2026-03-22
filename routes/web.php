@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Profile\DestroyProfileController;
-use App\Http\Controllers\Profile\EditProfileController;
-use App\Http\Controllers\Profile\UpdateProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,5 +16,3 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
-require __DIR__.'/auth.php';
