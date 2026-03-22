@@ -1,31 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\ConfirmablePassword;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Inertia\Response;
+use Spatie\RouteAttributes\Attributes\Post;
 
-class ConfirmablePasswordController extends Controller
+final class StoreConfirmablePasswordController extends Controller
 {
-    /**
-     * Show the confirm password view.
-     */
-    public function show(): Response
+    #[Post(uri: 'confirm-password', middleware: 'auth')]
+    public function __invoke(Request $request): RedirectResponse
     {
-        return Inertia::render('Auth/ConfirmPassword');
-    }
-
-    /**
-     * Confirm the user's password.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        if (! Auth::guard('web')->validate([
+        if (!Auth::guard('web')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,
         ])) {

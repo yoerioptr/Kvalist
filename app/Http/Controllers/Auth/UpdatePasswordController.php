@@ -7,13 +7,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Spatie\RouteAttributes\Attributes\Put;
 
-class PasswordController extends Controller
+final class UpdatePasswordController extends Controller
 {
-    /**
-     * Update the user's password.
-     */
-    public function update(Request $request): RedirectResponse
+    #[Put(uri: '/password', name: 'password.update', middleware: 'auth')]
+    public function __invoke(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
