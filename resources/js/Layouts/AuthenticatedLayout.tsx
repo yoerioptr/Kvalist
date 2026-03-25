@@ -1,9 +1,11 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
+import { usePage } from '@inertiajs/react';
+import { SidebarLayout } from '@/Catalyst/sidebar-layout';
+import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/Catalyst/navbar';
+import { Sidebar, SidebarBody, SidebarFooter, SidebarHeader, SidebarItem, SidebarLabel, SidebarSection, SidebarSpacer } from '@/Catalyst/sidebar';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/Catalyst/dropdown';
+import { Avatar } from '@/Catalyst/avatar';
+import { ChevronUpIcon, HomeIcon, ShoppingBagIcon, StoreIcon, UserIcon, LogOutIcon, PackageIcon } from 'lucide-react';
 
 export default function Authenticated({
     header,
@@ -11,209 +13,92 @@ export default function Authenticated({
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-
     if (!user) {
         return <div className="min-h-screen bg-gray-100">{children}</div>;
     }
 
+    const navItems = [
+        { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard') },
+        { name: 'Stores', href: route('stores.index'), icon: StoreIcon, current: route().current('stores.*') },
+        { name: 'Products', href: route('products.index'), icon: PackageIcon, current: route().current('products.*') },
+        { name: 'Baskets', href: route('baskets.index'), icon: ShoppingBagIcon, current: route().current('baskets.*') },
+    ];
+
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route('stores.index')}
-                                    active={route().current('stores.*')}
-                                >
-                                    Stores
-                                </NavLink>
-                                <NavLink
-                                    href={route('products.index')}
-                                    active={route().current('products.*')}
-                                >
-                                    Products
-                                </NavLink>
-                                <NavLink
-                                    href={route('baskets.index')}
-                                    active={route().current('baskets.*')}
-                                >
-                                    Baskets
-                                </NavLink>
-                            </div>
+        <SidebarLayout
+            navbar={
+                <Navbar>
+                    <NavbarSpacer />
+                    <NavbarSection>
+                        <Dropdown>
+                            <DropdownButton as={NavbarItem}>
+                                <Avatar src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&color=7F9CF5&background=EBF4FF&display_name=0`} square />
+                            </DropdownButton>
+                            <DropdownMenu anchor="bottom end">
+                                <DropdownItem href={route('profile.edit')}>
+                                    <UserIcon />
+                                    Profile
+                                </DropdownItem>
+                                <DropdownItem href={route('logout')} method="post">
+                                    <LogOutIcon />
+                                    Log Out
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </NavbarSection>
+                </Navbar>
+            }
+            sidebar={
+                <Sidebar>
+                    <SidebarHeader>
+                        <div className="flex items-center gap-3 px-2">
+                            <span className="text-lg font-semibold text-zinc-950 dark:text-white">Kvalist</span>
                         </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('stores.index')}
-                            active={route().current('stores.*')}
-                        >
-                            Stores
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('products.index')}
-                            active={route().current('products.*')}
-                        >
-                            Products
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('baskets.index')}
-                            active={route().current('baskets.*')}
-                        >
-                            Baskets
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
+                    </SidebarHeader>
+                    <SidebarBody>
+                        <SidebarSection>
+                            {navItems.map((item) => (
+                                <SidebarItem key={item.name} href={item.href} current={item.current}>
+                                    <item.icon />
+                                    <SidebarLabel>{item.name}</SidebarLabel>
+                                </SidebarItem>
+                            ))}
+                        </SidebarSection>
+                    </SidebarBody>
+                    <SidebarSpacer />
+                    <SidebarFooter>
+                        <Dropdown>
+                            <DropdownButton as={SidebarItem}>
+                                <span className="flex min-w-0 items-center gap-3">
+                                    {/*<Avatar src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&color=7F9CF5&background=EBF4FF&display_name=0`} square />*/}
+                                    <span className="min-w-0">
+                                        <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{user.name}</span>
+                                        <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">{user.email}</span>
+                                    </span>
+                                </span>
+                                <ChevronUpIcon />
+                            </DropdownButton>
+                            <DropdownMenu anchor="top start">
+                                <DropdownItem href={route('profile.edit')}>
+                                    <UserIcon />
+                                    Profile
+                                </DropdownItem>
+                                <DropdownItem href={route('logout')} method="post">
+                                    <LogOutIcon />
+                                    Log Out
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </SidebarFooter>
+                </Sidebar>
+            }
+        >
             {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
+                <div className="mb-8">
+                    {header}
+                </div>
             )}
-
-            <main>{children}</main>
-        </div>
+            {children}
+        </SidebarLayout>
     );
 }

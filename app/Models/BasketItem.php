@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $product_id
  * @property int $amount
  * @property Unit $unit
+ * @property bool $is_in_cart
+ * @property int $weight
  * @property string $created_by
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -23,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read \App\Models\Product $product
  * @property-read \App\Models\User $creator
  */
-#[Fillable(['basket_id', 'product_id', 'amount', 'unit', 'created_by'])]
+#[Fillable(['basket_id', 'product_id', 'amount', 'unit', 'is_in_cart', 'weight', 'created_by'])]
 final class BasketItem extends Model
 {
     /** @use HasFactory<\Database\Factories\BasketItemFactory> */
@@ -50,8 +52,17 @@ final class BasketItem extends Model
         return [
             'amount' => 'integer',
             'unit' => Unit::class,
+            'is_in_cart' => 'boolean',
+            'weight' => 'integer',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    protected $appends = ['unit_label'];
+
+    public function getUnitLabelAttribute(): string
+    {
+        return $this->unit->label();
     }
 }

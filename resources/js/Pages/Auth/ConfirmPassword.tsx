@@ -1,10 +1,10 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { Button } from '@/Catalyst/button';
+import { Field, FieldGroup, Fieldset, Label, ErrorMessage } from '@/Catalyst/fieldset';
+import { Input } from '@/Catalyst/input';
+import { Text } from '@/Catalyst/text';
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -23,33 +23,36 @@ export default function ConfirmPassword() {
         <GuestLayout>
             <Head title="Confirm Password" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                This is a secure area of the application. Please confirm your
-                password before continuing.
+            <div className="mb-4">
+                <Text>
+                    This is a secure area of the application. Please confirm your password before continuing.
+                </Text>
             </div>
 
             <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                <Fieldset>
+                    <FieldGroup>
+                        <Field>
+                            <Label>Password</Label>
+                            <Input
+                                type="password"
+                                name="password"
+                                value={data.password}
+                                className="mt-2"
+                                autoFocus
+                                onChange={(e) => setData('password', e.target.value)}
+                                required
+                            />
+                            <ErrorMessage>{errors.password}</ErrorMessage>
+                        </Field>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
-                    </PrimaryButton>
-                </div>
+                        <div className="mt-4 flex items-center justify-end">
+                            <Button type="submit" color="indigo" disabled={processing}>
+                                Confirm
+                            </Button>
+                        </div>
+                    </FieldGroup>
+                </Fieldset>
             </form>
         </GuestLayout>
     );

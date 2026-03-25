@@ -1,10 +1,10 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
+import { Heading } from '@/Catalyst/heading';
+import { Button } from '@/Catalyst/button';
+import { Field, FieldGroup, Fieldset, Label, ErrorMessage } from '@/Catalyst/fieldset';
+import { Input } from '@/Catalyst/input';
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -19,43 +19,35 @@ export default function Create() {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    New Product
-                </h2>
+                <Heading>New Product</Heading>
             }
         >
             <Head title="New Product" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <form onSubmit={submit} className="max-w-xl">
-                                <div>
-                                    <InputLabel htmlFor="name" value="Name" />
-                                    <TextInput
-                                        id="name"
-                                        type="text"
-                                        name="name"
-                                        value={data.name}
-                                        className="mt-1 block w-full"
-                                        isFocused={true}
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        required
-                                    />
-                                    <InputError message={errors.name} className="mt-2" />
-                                </div>
+            <form onSubmit={submit} className="max-w-xl">
+                <Fieldset>
+                    <FieldGroup>
+                        <Field>
+                            <Label>Name</Label>
+                            <Input
+                                name="name"
+                                value={data.name}
+                                className="mt-2"
+                                autoFocus
+                                onChange={(e) => setData('name', e.target.value)}
+                                required
+                            />
+                            <ErrorMessage>{errors.name}</ErrorMessage>
+                        </Field>
 
-                                <div className="mt-4">
-                                    <PrimaryButton disabled={processing}>
-                                        Create Product
-                                    </PrimaryButton>
-                                </div>
-                            </form>
+                        <div className="mt-8">
+                            <Button type="submit" color="indigo" disabled={processing}>
+                                Create Product
+                            </Button>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </FieldGroup>
+                </Fieldset>
+            </form>
         </AuthenticatedLayout>
     );
 }

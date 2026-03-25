@@ -1,25 +1,19 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import { Heading } from '@/Catalyst/heading';
+import { Text } from '@/Catalyst/text';
 
 export default function Dashboard() {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
-                </h2>
+                <Heading>Dashboard</Heading>
             }
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            You're logged in!
-                        </div>
-                    </div>
-                </div>
+            <div className="bg-white p-6 shadow-xs ring-1 ring-zinc-950/5 sm:rounded-2xl dark:bg-zinc-900 dark:ring-white/10">
+                <Text>You're logged in!</Text>
             </div>
         </AuthenticatedLayout>
     );

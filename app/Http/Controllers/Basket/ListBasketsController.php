@@ -14,7 +14,7 @@ final class ListBasketsController extends InertiaController
     {
         return $this->render('Baskets/Index', [
             'baskets' => Basket::query()
-                ->with(['creator', 'store'])
+                ->with(['creator', 'store', 'items' => fn($query) => $query->with('product')->orderBy('weight', 'asc')])
                 ->latest()
                 ->get(),
         ]);
